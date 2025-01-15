@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Navbar.module.css';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -7,12 +6,11 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   return (
-    <div className={styles.navbar}>
-      <button onClick={toggleSidebar} className={styles.toggleButton}>
+    <nav className="flex items-center justify-between bg-blue-500 text-white px-5 py-2.5 h-14">
+      <button onClick={toggleSidebar} className="bg-transparent border-none text-white text-3xl cursor-pointer">
         ☰
       </button>
       <h1>Next.js App</h1>
-    </div>
+    </nav>
   );
 };
-
