@@ -15,17 +15,12 @@ interface FetchResult {
   data: Book[] | null;
 }
 
-export const fetchBooks = async (
+export const fetchBooksActions = async (
   prevState: FetchResult,
   queryData: FormData
 ): Promise<FetchResult> => {
   try {
-    const books = await client
-      .db('flibusta')
-      .collection('Books')
-      .find({ genre: queryData.get('genre') })
-      .limit(10)
-      .toArray();
+    const books = await fetchBooks(queryData.get('genre') as string);
     return {
       error: null,
       data: books as unknown as Book[],
@@ -36,4 +31,8 @@ export const fetchBooks = async (
       data: null,
     };
   }
+};
+
+export const fetchBooks = async (genre: string): Promise<unknown[]> => {
+  return await client.db('flibusta').collection('Books').find({ genre }).limit(10).toArray();
 };
