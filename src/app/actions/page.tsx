@@ -9,7 +9,12 @@ export default function Actions() {
         <Link href="/actions/use-action-state">
           <h2 className='text-3xl py-4'>useActionState</h2>
         </Link>
-        
+        <Link href="/actions/use-form-status">
+          <h2 className='text-3xl py-4'>useFormStatus</h2>
+        </Link>
+        <Link href="/actions/use-client">
+          <h2 className='text-3xl py-4'>use client</h2>
+        </Link>
       </>
   );
 }

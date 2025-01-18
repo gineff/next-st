@@ -4,8 +4,8 @@ import { MongoClient } from 'mongodb';
 const mongodb_uri = <string>process.env.NEXT_PUBLIC_MONGODB_URI;
 const client = new MongoClient(mongodb_uri);
 
-interface Book {
-  id: number;
+export interface Book {
+  id?: number;
   title: string;
   _id: string;
 }
@@ -34,5 +34,12 @@ export const fetchBooksActions = async (
 };
 
 export const fetchBooks = async (genre: string): Promise<unknown[]> => {
-  return await client.db('flibusta').collection('Books').find({ genre }).limit(10).toArray();
+  'use server';
+  const fetchedBooks = await client
+    .db('flibusta')
+    .collection('Books')
+    .find({ genre })
+    .limit(10)
+    .toArray();
+  return fetchedBooks.map(({ bid, title }) => ({ _id: bid, title }));
 };
