@@ -1,61 +1,47 @@
 'use client';
-import { useState } from 'react';
-import { deliverMessage, getGenresAction } from './actions';
-//import { UpdateGenresForm } from './updateGenresForm';
-import  UpdateGenresForm  from './updateGenresForm';
-
+import { useEffect, useOptimistic, useState } from 'react';
+import { getGenresAction, writeFileAction, deliverMessage } from './actions';
+import { UpdateGenresForm } from './updateGenresForm';
+import { Thread } from './thread.jsx';
+import { GenresList } from './genresList';
 
 export default function UseOptimistic() {
-  const genresPromise = getGenresAction();
+  const [genres, setGenres] = useState<string[]>([]);
 
-  return <UpdateGenresForm genresPromise={genresPromise} />;
-}
-/*
-import { useOptimistic, useState, useRef } from "react";
-import { deliverMessage } from "./actions";
-
-function Thread({ messages, sendMessage }) {
-  const formRef = useRef();
-  async function formAction(formData) {
-    addOptimisticMessage(formData.get("message"));
-    formRef.current.reset();
-    await sendMessage(formData);
+  const [messages, setMessages] = useState([{ text: 'Hello there!', sending: false, key: 1 }]);
+  async function sendMessage(formData) {
+    const sentMessage = await deliverMessage(formData.get('message'));
+    setMessages((messages) => [...messages, { text: sentMessage }]);
   }
-  const [optimisticMessages, addOptimisticMessage] = useOptimistic(
-    messages,
-    (state, newMessage) => [
-      ...state,
-      {
-        text: newMessage,
-        sending: true
-      }
-    ]
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      const genres = await getGenresAction();
+      setGenres(genres);
+    };
+    fetchGenres();
+  }, []);
+
+  const [optimisticGenres, addOptimisticGenre] = useOptimistic(
+    genres,
+    (state: string[], newGenre: string) => [...state, newGenre]
   );
+
+  const addGenre = async (genre: string) => {
+    addOptimisticGenre(genre);
+    try {
+      await writeFileAction(JSON.stringify([...genres, genre]));
+      setGenres((genres) => [...genres, genre]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
-      {optimisticMessages.map((message, index) => (
-        <div key={index}>
-          {message.text}
-          {!!message.sending && <small> (Sending...)</small>}
-        </div>
-      ))}
-      <form action={formAction} ref={formRef}>
-        <input type="text" name="message" placeholder="Hello!" />
-        <button type="submit">Send</button>
-      </form>
+      <UpdateGenresForm addGenre={addGenre} />
+      <GenresList genres={optimisticGenres} />
+      <Thread messages={messages} sendMessage={sendMessage} />
     </>
   );
 }
-
-export default function App() {
-  const [messages, setMessages] = useState([
-    { text: "Hello there!", sending: false, key: 1 }
-  ]);
-  async function sendMessage(formData) {
-    const sentMessage = await deliverMessage(formData.get("message"));
-    setMessages((messages) => [...messages, { text: sentMessage }]);
-  }
-  return <Thread messages={messages} sendMessage={sendMessage} />;
-}
-*/
