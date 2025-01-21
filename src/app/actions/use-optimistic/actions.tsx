@@ -21,7 +21,7 @@ export const getGenresAction = async (): Promise<string[]> => {
 export const writeFileAction = async (content: string) => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    //await writeFile(genresFilePath, content, 'utf-8');
+    await writeFile(genresFilePath, content, 'utf-8');
   } catch (error) {
     console.error('Failed to write genres file:', error);
     throw error;

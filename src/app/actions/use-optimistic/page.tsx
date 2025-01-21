@@ -20,8 +20,6 @@ export default function UseOptimistic() {
     (state: string[], newGenre: string) => [...state, newGenre]
   );
 
-  console.log('optimisticGenres', optimisticGenres);
-
   const addGenre = async (genre: string) => {
     addOptimisticGenre(genre);
     try {
