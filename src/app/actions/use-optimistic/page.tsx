@@ -1,18 +1,11 @@
 'use client';
 import { useEffect, useOptimistic, useState } from 'react';
-import { getGenresAction, writeFileAction, deliverMessage } from './actions';
+import { getGenresAction, writeFileAction } from './actions';
 import { UpdateGenresForm } from './updateGenresForm';
-import { Thread } from './thread.jsx';
 import { GenresList } from './genresList';
 
 export default function UseOptimistic() {
   const [genres, setGenres] = useState<string[]>([]);
-
-  const [messages, setMessages] = useState([{ text: 'Hello there!', sending: false, key: 1 }]);
-  async function sendMessage(formData) {
-    const sentMessage = await deliverMessage(formData.get('message'));
-    setMessages((messages) => [...messages, { text: sentMessage }]);
-  }
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -26,6 +19,8 @@ export default function UseOptimistic() {
     genres,
     (state: string[], newGenre: string) => [...state, newGenre]
   );
+
+  console.log('optimisticGenres', optimisticGenres);
 
   const addGenre = async (genre: string) => {
     addOptimisticGenre(genre);
@@ -41,7 +36,6 @@ export default function UseOptimistic() {
     <>
       <UpdateGenresForm addGenre={addGenre} />
       <GenresList genres={optimisticGenres} />
-      <Thread messages={messages} sendMessage={sendMessage} />
     </>
   );
 }
