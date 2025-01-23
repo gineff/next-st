@@ -10,6 +10,11 @@ export default function Home() {
             Form actions
           </div>
         </Link>
+        <Link href="/concurrent">
+          <div className="text-2xl text-blue-600 dark:text-blue-500 hover:underline">
+            Concurrent rendering
+          </div>
+        </Link>
       </main>
     </div>
   );
