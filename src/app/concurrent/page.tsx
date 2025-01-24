@@ -10,6 +10,11 @@ export default function Concurrent() {
             useTransition
           </a>
         </Link>
+        <Link href="/concurrent/use-deferred-value" legacyBehavior>
+          <a className="block text-3xl text-blue-600 hover:text-blue-800 font-semibold py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 shadow transition duration-200">
+            useDeferredValue
+          </a>
+        </Link>
       </div>
     </>
   );
